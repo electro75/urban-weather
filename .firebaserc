@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "urban-assign-ii": {
+      "hosting": {
+        "urban-weather": [
+          "urban-assign-ii"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "urban-assign-ii"
+  }
+}
