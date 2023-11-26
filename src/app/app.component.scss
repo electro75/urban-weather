@@ -1,4 +1,36 @@
 #chart {
-    max-width: 650px;
-    margin: 35px auto;
+    // max-width: 650px;
+    // margin: 35px auto;
+}
+
+.main-container {
+    margin-top: 30px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.chart-container {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.suggestion-container {
+    width: 45%
+}
+
+.img-container {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.main-sugg {
+    width: 150px
+}
+
+.tabs {
+    width: 200px
 }
