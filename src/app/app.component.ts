@@ -14,6 +14,7 @@ import {
   ApexYAxis
 } from "ng-apexcharts";
 import { ChartService } from './chart.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
     title: ApexTitleSubtitle;
   };
 
+  latestData : any = {}  
+
   @ViewChild("tempChart") tempChart: ChartComponent;
   @ViewChild("windChart") windChart: ChartComponent;
   @ViewChild("precChart") precChart: ChartComponent;
@@ -44,11 +47,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   interval: any;
   displayType = 'Live';
+  liveTempData: any = [];
+  liveWindData: any = [];
+  livePrecData: any = [];
 
-  constructor(public fdb : Database, public __charts: ChartService) {
+  constructor(public fdb : Database, public __charts: ChartService, private http: HttpClient) {
     this.tempChartOptions = this.__charts.getChartOptions('Temperature', 'deg C')
     this.windChartOptions = this.__charts.getChartOptions('Wind Speed', 'km/hr', 0)
-    this.precChartOptions = this.__charts.getChartOptions('Precipitation', 'mm', 0)
+    this.precChartOptions = this.__charts.getChartOptions('Precipitation', '%', 0)
   }
 
   getProcessedData(data: any, val: string) {
@@ -60,32 +66,126 @@ export class AppComponent implements OnInit, OnDestroy {
     })
   }
 
+  processPreviousData(data: any) {
+    console.log(data)
+    data.date_time.forEach((dt: any, index: number) => {
+      this.previousData.temp.push({
+        x: dt,
+        y: data.temp[index]
+      })
+
+      this.previousData.wind.push({
+        x: dt,
+        y: data.wind_speed[index]        
+      })
+
+      this.previousData.prec.push({
+        x: dt,
+        y: data.prec[index]
+      })
+    })
+  }
+
+  updateSuggestion(weatherData: any) {
+    this.latestData = weatherData
+  }
+
+  previousData: any = {
+    temp: [],
+    wind: [],
+    prec: []
+  }
+  isSuggestionUpdated = false;
+  isPreviousDataStored = false;
+
+  updateDisplay() {
+    switch(this.displayType){
+      case "Historic":
+        this.tempChart.updateOptions({
+          series: [{
+            data: this.previousData.temp
+          }]
+        })
+
+        this.windChart.updateOptions({
+          series: [{
+            data: this.previousData.wind
+          }]
+        })
+
+        this.precChart.updateOptions({
+          series: [{
+            data: this.previousData.prec
+          }]
+        })
+        
+        break;
+      
+      case "Live":
+        this.tempChart.updateOptions({
+          series: [{
+            data: this.liveTempData
+          }]
+        })
+        this.windChart.updateOptions({
+          series: [{
+            data: this.liveWindData
+          }]
+        })
+
+        this.precChart.updateOptions({
+          series: [{
+            data: this.livePrecData
+          }]
+        })
+        break;
+    }
+    
+  }
+
   ngOnInit(): void {
 
     const starCountRef = ref(this.fdb);
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-      // get keys from current data
-      let updateTempData = this.getProcessedData(data, "temp")
-      let updateWindData = this.getProcessedData(data, "wind_speed")
-      let updatePrecData = this.getProcessedData(data, "precipitation")
+
+      if(!this.isPreviousDataStored) {
+        this.processPreviousData(data["weather-data"])
+        this.isPreviousDataStored = true
+      }
+        
+      this.liveTempData = this.getProcessedData(data, "temp")
+      this.liveWindData = this.getProcessedData(data, "wind_speed")
+      this.livePrecData = this.getProcessedData(data, "precipitation")
+
       this.tempChart.updateOptions({
         series: [{
-          data: updateTempData
+          data: this.liveTempData
         }]
       })
 
       this.windChart.updateOptions({
         series:[{
-          data: updateWindData
+          data: this.liveWindData
         }]
       })
 
       this.precChart.updateOptions({
         series:[{
-          data : updatePrecData
+          data : this.livePrecData
         }]
       })
+
+
+
+      if(!this.isSuggestionUpdated) {
+        this.updateSuggestion({
+          temp: this.liveTempData[this.liveTempData.length - 1].y,
+          wind: this.liveWindData[this.liveWindData.length - 1].y,
+          prec: this.livePrecData[this.livePrecData.length - 1].y
+        })
+        this.isSuggestionUpdated = true;
+      }
     });
   }
 
