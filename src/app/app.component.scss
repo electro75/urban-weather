@@ -18,7 +18,21 @@
 }
 
 .suggestion-container {
-    width: 45%
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.main-img-container {
+    width: 25%
+}
+
+.suggestion-alert {
+    width: 45%;
+}
+
+.accessory-container {
+    width: 25%;
 }
 
 .img-container {
@@ -28,7 +42,8 @@
 }
 
 .main-sugg {
-    width: 150px
+    width: 100px;
+    margin: 0px 5px;
 }
 
 .tabs {

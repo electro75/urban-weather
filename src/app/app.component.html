@@ -276,21 +276,6 @@
       margin: 8px 0;
     }
 
-    .card.highlight-card span {
-      margin-left: 72px;
-    }
-
-    svg#rocket-smoke {
-      right: 120px;
-      transform: rotate(-5deg);
-    }
-  }
-
-  @media screen and (max-width: 575px) {
-    svg#rocket-smoke {
-      display: none;
-      visibility: hidden;
-    }
   }
 </style>
 
@@ -372,13 +357,27 @@
         ></apx-chart>
       </div>
     </div>
-    <div class="suggestion-container" *ngIf="displayType === 'Live'" >
-      <h4>Suggestions based on current weather</h4>
-      <div class="img-container">
+    <h4 *ngIf="displayType === 'Live'">Suggestions based on current weather</h4>
+    <div class="suggestion-container" *ngIf="displayType === 'Live'">
+      <div class="main-img-container">
         <img src="../assets/light-jacket.png" *ngIf="latestData.temp > 10 && latestData.temp < 25" alt="light-jacket" class="sugg-img main-sugg">
         <img src="../assets/heavy-jacket.png" *ngIf="latestData.temp < 10" alt="heavy-jacket" class="sugg-img main-sugg">
         <img src="../assets/light-pant.png" alt="light-pant" *ngIf="latestData.temp > 10 && latestData.temp < 35" class="sugg-img main-sugg">
         <img src="../assets/heavy-pants.png" *ngIf="latestData.temp < 10" alt="heavy-pants" class="sugg-img main-sugg">
+        <img src="../assets/shirt.png" *ngIf="latestData.temp > 25 && latestData.temp < 40" alt="shirt" class="sugg-img main-sugg">
+        <img src="../assets/shorts.png" *ngIf="latestData.temp > 35" alt="shirt" class="sugg-img main-sugg">
+        <img src="../assets/shorts.png" *ngIf="latestData.temp > 40" alt="shirt" class="sugg-img main-sugg">
+      </div>
+      <div class="suggestion-alert">
+        <!-- add condition -->
+        <alert type="info">
+          <strong>Heads up! Its super chilly out there!</strong>, wearing a padded jacket and insulated pants is reccommended.
+          Also, don't forget to accessorize!
+        </alert>        
+      </div>
+      <div class="accessory-container">
+        <img src="../assets/hat.png" alt="hat" class="sugg-img main-sugg">
+        <img src="../assets/scarf.png" alt="scarf" class="sugg-img main-sugg">
       </div>
     </div>
   </div>
@@ -389,5 +388,3 @@
   </svg>
 
 </div>
-
-<router-outlet></router-outlet>

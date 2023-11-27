@@ -7,7 +7,7 @@ export class ChartService {
 
   constructor() { }
 
-  getChartOptions(chartTitle: string, ylable: string, minVal = -5) {
+  getChartOptions(chartTitle: string, ylable: string, minVal = -5, maxVal = 40) {
     return {
       series: [
         {
@@ -38,7 +38,7 @@ export class ChartService {
       },
       yaxis: {
         min:minVal,
-        max: 40,
+        max: maxVal,
         title: {
           text: ylable
         }

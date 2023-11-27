@@ -54,7 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(public fdb : Database, public __charts: ChartService, private http: HttpClient) {
     this.tempChartOptions = this.__charts.getChartOptions('Temperature', 'deg C')
     this.windChartOptions = this.__charts.getChartOptions('Wind Speed', 'km/hr', 0)
-    this.precChartOptions = this.__charts.getChartOptions('Precipitation', '%', 0)
+    this.precChartOptions = this.__charts.getChartOptions('Precipitation', '%', 0, 8)
   }
 
   getProcessedData(data: any, val: string) {
@@ -67,7 +67,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   processPreviousData(data: any) {
-    console.log(data)
     data.date_time.forEach((dt: any, index: number) => {
       this.previousData.temp.push({
         x: dt,
@@ -118,7 +117,6 @@ export class AppComponent implements OnInit, OnDestroy {
             data: this.previousData.prec
           }]
         })
-        
         break;
       
       case "Live":
@@ -139,8 +137,10 @@ export class AppComponent implements OnInit, OnDestroy {
           }]
         })
         break;
+
+      default:
+        return
     }
-    
   }
 
   ngOnInit(): void {
@@ -175,8 +175,6 @@ export class AppComponent implements OnInit, OnDestroy {
           data : this.livePrecData
         }]
       })
-
-
 
       if(!this.isSuggestionUpdated) {
         this.updateSuggestion({
