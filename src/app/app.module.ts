@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import {ButtonsModule} from 'ngx-bootstrap/buttons';
 import { AlertModule } from 'ngx-bootstrap/alert';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +21,7 @@ import { ChartService } from './chart.service';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
@@ -26,6 +29,7 @@ import { ChartService } from './chart.service';
     NgApexchartsModule,
     ButtonsModule.forRoot(),
     AlertModule.forRoot(),
+    TypeaheadModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideDatabase(() => getDatabase())
   ],

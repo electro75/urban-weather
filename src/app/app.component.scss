@@ -3,6 +3,12 @@
     // margin: 35px auto;
 }
 
+.control-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .main-container {
     margin-top: 30px;
     display: flex;
@@ -20,11 +26,12 @@
 .suggestion-container {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .main-img-container {
-    width: 25%
+    width: 20%
 }
 
 .suggestion-alert {
