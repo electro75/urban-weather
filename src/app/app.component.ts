@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { getDatabase, ref, onValue, Database, object } from '@angular/fire/database';
+import { ref, onValue, Database } from '@angular/fire/database';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -35,6 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
     title: ApexTitleSubtitle;
   };
 
+  // extra location data
   locationData: any = {
     "Mumbai" : {
       lat: 19.07,
@@ -135,7 +136,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.updateCurrentLocationData(this.customLocationData)
       })
-    }, 5000)
+    }, 10000)
     
   }
 
@@ -224,7 +225,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   updateCurrentLocationData(data: any) {
-    console.log(data)
     if(!this.isPreviousDataStored) {      
       this.processPreviousData(data["weather-data"])
       this.isPreviousDataStored = true
@@ -265,9 +265,10 @@ export class AppComponent implements OnInit, OnDestroy {
     const starCountRef = ref(this.fdb);
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
-
+      // show the data received from firebase
+      console.log(data);
       if(this.selectedLocation) return;
-      console.log('updating');
+      if(this.displayType === 'Historic') return;
       this.updateCurrentLocationData(data)
     });
   }
